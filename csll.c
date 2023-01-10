@@ -99,6 +99,7 @@ name *deleteatend(name *tail)
     free(temp);
     temp=NULL;
     tail=temp2;
+    // printf("-- %d",temp2->data);
      print(tail);
     return tail;
 }
@@ -324,7 +325,7 @@ int main()
              case 11:
                  printf("Enter the no of nodes\n");
                  scanf("%d",&data);
-                 tail=sort(tail,data);
+                 tail=orderedList(tail,data);
                  break;
             case 12:
                  copy(tail);

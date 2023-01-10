@@ -190,13 +190,11 @@ node* orderedList(node* head, int* size, int data){
     node* index=NULL;
     int temp;
     if(head==NULL || size==0){
-        // printf("DATA: %d SIZE: %d\n",data, *size);
         head =insertAtPos(head, 1, data, size);
-        // display(head, *size);
         return head;
     }
-    else if(head->next!=NULL){
-        // printf("DATA: %d SIZE: %d\n",data, *size);
+    else if(head->next!=NULL){ 
+        
         while(current!=NULL){
             index=current->next;
             while(index!=NULL){
