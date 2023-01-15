@@ -33,7 +33,8 @@ int operate(int op1, int op2, char a){
         case '-': return op2-op1;
         case '*': return op2*op1;
         case '/': return op2/op1;
-        case '^': return pow(op2,op1);
+        case '^': 
+        case '$': return pow(op2,op1);
     }
 }
 
