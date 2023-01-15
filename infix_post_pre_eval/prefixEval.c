@@ -39,7 +39,7 @@ int operate(int op1, int op2, char a){
 }
 
 
-void postEval(char* exp, int size)
+void preEval(char* exp, int size)
 {
     Stack* s= (Stack *)malloc(sizeof(Stack));
     s->top=-1;
@@ -68,5 +68,5 @@ void main(){
     char exp[50];
     printf("Enter exp\n");
     scanf("%s", exp);
-    postEval(exp, strlen(exp));
+    preEval(exp, strlen(exp));
 }
