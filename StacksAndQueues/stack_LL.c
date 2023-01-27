@@ -32,13 +32,9 @@ void push(Stack* s, int data)
 {
     Node* newnode= (Node *)malloc(sizeof(Node));
     newnode->data=data;
-    if(s->top==NULL) {
+    if(s->top==NULL) newnode->next=NULL;
+    else newnode->next=s->top;
         s->top=newnode;
-    newnode->next=NULL;
-    }else{
-    newnode->next=s->top;
-    s->top=newnode;
-    }
     s->count++;
     display(s);
 }
