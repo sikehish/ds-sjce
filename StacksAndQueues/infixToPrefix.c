@@ -45,11 +45,12 @@ void infixToPostfix(char* exp, int size, char* ans)
             }
             pop(s);
         } 
-        else if (s->top==-1 || prec(a)>prec(s->arr[s->top]) || a==')') push(s, a);
-        
-        else if(prec(a)==3 && prec(s->arr[s->top]==3)) {
+         else if(prec(a)==3 && prec(s->arr[s->top])==3) {
          ans[j++]=pop(s);   push(s,a); 
         }
+        else if (s->top==-1 || prec(a)>=prec(s->arr[s->top]) || a==')') push(s, a);
+        
+       
         else {
             while (prec(a)<prec(s->arr[s->top]) && s->top!=-1){
                 ans[j++]=pop(s);
