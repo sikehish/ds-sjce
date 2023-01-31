@@ -54,17 +54,26 @@ Node* insert(Node* head, int data, int pos)
         display(node); 
         return node;
     }
-
-    Node* temp=head;
+Node* temp= head;
+    if(pos==size+1)
+    {
+        while(temp->next!=NULL) temp=temp->next;
+        temp->next=node;
+        node->prev=temp;
+        size++;
+        display(head);
+        return head;
+    }
+    temp=head;
     int i=1;
     while(i<pos-1){
         temp=temp->next;
         i++;
     }
     node->next=temp->next;
-    temp->next=node;
     node->prev=temp;
-    if(node->next) node->next->prev=node;
+    node->next->prev=node;
+    temp->next=node;
     size++;
     display(head);
     return head;
@@ -90,20 +99,33 @@ Node* delete(Node* head, int pos)
         display(head); 
         return head;
     }
-    Node* temp=head;
-Node* prev=NULL;
+     Node* temp=head;
+    Node* prev=NULL;
+     if(pos==size+1)
+    {
+        while(temp->next!=NULL) {
+            prev=temp;
+            temp=temp->next;
+        }
+        prev->next=NULL;
+        free(temp);
+        size--;
+        display(head);
+        return head;
+    }
+    temp=head;
     int i=1;
-    do{
+    while(i<pos-1){
         temp=temp->next;
         i++;
-    }while(i<pos);
-    // if(temp->next==NULL) printf("Last Node: %d\n", temp->prev->data);
-    temp->prev->next=temp->next;
-    if(temp->next!=NULL) temp->next->prev=temp->prev;
-    free(temp);
+    }
+    Node* temp2= temp->next;
+   temp->next=temp2->next;
+    temp2->next->prev=temp;
+    free(temp2);
     size--;
     display(head);
-    return head;
+    return head; 
 }
 
 void searchByKey(Node* head, int k)
@@ -169,6 +191,7 @@ Node* orderedList(Node* head, int data){
         if(temp->data>data) break;
         temp=temp->next;
     }
+    if(temp==NULL) i++;
     printf("After Insertion: \n");
     head= insert(head,data, i);
     // display(head);
@@ -201,26 +224,27 @@ Node* reverse(Node* head)
     return prev;
 }
 
-// Node* copyLL(Node* head)
-// {
-//     if(head==NULL){
-//         printf("LL empty\n"); return NULL;
-//     }
-//     Node* temp=head;
-//     Node* head2= (Node *)malloc(sizeof(Node));
-//     head2->next=NULL;
-//     head2->data=head->data;
-//     temp=temp->next; Node* prev=head2;
-//     while(temp!=NULL){
-//         Node* node=(Node *)malloc(sizeof(Node));
-//         node->data=temp->data;
-//         prev->next=node;
-//         node->next=NULL;
-//         temp=temp->next;
-//     }
-//     prev->next=NULL;
-//     return head2;
-// }
+Node* copyLL(Node* head)
+{
+    if(head==NULL){
+        printf("LL empty\n"); return NULL;
+    }
+    Node* temp=head;
+    Node* head2= (Node *)malloc(sizeof(Node));
+    head2->next=NULL;
+    head2->data=head->data;
+    temp=temp->next; Node* prev=head2;
+    while(temp!=NULL){
+        Node* node=(Node *)malloc(sizeof(Node));
+        node->data=temp->data;
+        prev->next=node;node->prev=prev;
+        node->next=NULL;
+        temp=temp->next;
+        prev=node;
+    }
+    // prev->next=NULL;
+    return head2;
+}
 
 void main()
 {
@@ -230,7 +254,7 @@ void main()
     while(1)
     {
         printf("0.Exit\n1.Insert Front\n2.Insert Rear\n3.Delete Front\n4.Delete Rear\n5.Display\n6.Insert At Pos\n7.Delete At Pos\n8.Search By Key\n9.Delete By Key\n10.Ordered List\n 11.Reverse A List\n");
-        // printf("12.Copy a list\n");
+        printf("12.Copy a list\n");
         printf("\n-----\nEnter you choice: ");
         scanf("%d",&ch);
         switch(ch){
@@ -301,10 +325,10 @@ void main()
             head=reverse(head);
             break;
 
-            // case 12:
-            // h2=copyLL(head);
-            // display(head);
-            // break;
+            case 12:
+            h2=copyLL(head);
+            display(head);
+            break;
 
             default: printf("Invalid choice\n");
         }

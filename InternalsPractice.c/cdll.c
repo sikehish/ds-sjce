@@ -6,61 +6,56 @@ int size=0;
 typedef struct Node{
     int data;
     struct Node* next;
+    struct Node* prev;
 } Node;
 
-void display(Node* tail)
+
+
+void display(Node* head)
 {
-    Node* temp=tail->next;
+    Node* temp=head;
     if(size==0){
         printf("Linked List empty\n");
         return;
     }
-    
-    do{
+    while(temp!=NULL)
+    {
         printf("%d ", temp->data);
         temp=temp->next;
-    }while(temp!=tail->next);
+    }
     printf("\n");
 
 }
 
-Node* insert(Node* tail, int data, int pos)
+Node* insert(Node* head, int data, int pos)
 {
     Node* node= (Node *)malloc(sizeof(Node));
     node->data=data;
-    node->next=node;
+    node->next=NULL;
+    node->prev=NULL;
 
-    if(size==0 || tail==NULL) {
+    if(size==0) {
         size++;
         display(node);
         return node;
     }
 
-    Node* head=tail->next;
     if(pos<=0 || pos>(size+1)){
         printf("Invalid pos\n");
-        display(tail); 
-        return tail;
+        display(head); 
+        return head;
     }
 
     if(pos==1){
-        node->next=tail->next;
-        tail->next=node;
+        node->next=head;
+        head->prev=node;
+        node->prev=NULL;
         size++;
-        display(tail); 
-        return tail;
+        display(node); 
+        return node;
     }
-Node* temp=head;
-    if(pos==size+1)
-    {
-        size++;
-        node->next=tail->next;
-        tail->next=node;
-        tail=node;
-        display(tail);
-        return tail;
-    }
-    temp=head;
+
+    Node* temp=head;
     int i=1;
     while(i<pos-1){
         temp=temp->next;
@@ -68,192 +63,164 @@ Node* temp=head;
     }
     node->next=temp->next;
     temp->next=node;
+    node->prev=temp;
+    if(node->next) node->next->prev=node;
     size++;
-    display(tail);
-    return tail;
+    display(head);
+    return head;
 }
 
-Node* delete(Node* tail, int pos)
+Node* delete(Node* head, int pos)
 {
-
-    if(size==0 || tail==NULL) {
+    if(size==0 || head==NULL) {
         printf("LL empty!\n"); 
         return NULL;
     }
 
     if(pos<=0 || pos>(size)){
         printf("Invalid pos\n");
-        return tail;
+        return head;
     }
-    Node* head=tail->next;
 
     if(pos==1){
         Node* temp=head;
         head=head->next;
         free(temp);
-        tail->next=head;
         size--;
-        display(tail); 
-        return tail;
+        display(head); 
+        return head;
     }
-
-     Node* temp=head;
-    Node* prev=NULL;
-     if(pos==size+1)
-    {
-        while(temp->next!=tail) {
-            temp=temp->next;
-        }
-        temp->next=tail->next;
-        free(tail);
-        size--;
-        display(tail);
-        return tail;
-    }
-    temp=head;
+    Node* temp=head;
+Node* prev=NULL;
     int i=1;
-    while(i<pos-1){
+    do{
         temp=temp->next;
         i++;
-    }
-    Node* temp2= temp->next;
-   temp->next=temp2->next;
-    free(temp2);
+    }while(i<pos);
+    // if(temp->next==NULL) printf("Last Node: %d\n", temp->prev->data);
+    temp->prev->next=temp->next;
+    if(temp->next!=NULL) temp->next->prev=temp->prev;
+    free(temp);
     size--;
-    display(tail);
-    return tail; 
+    display(head);
+    return head;
 }
 
-void searchByKey(Node* tail, int k)
+void searchByKey(Node* head, int k)
 {
-
-    if(tail==NULL) {
+    if(head==NULL) {
         printf("LL empty\n"); return;
     }
-    Node* head=tail->next;
     Node* temp=head;
-   do{
+    while(temp!=NULL){
         if(temp->data==k) {
             printf("Element %d found!\n", temp->data); return;
         }
         temp=temp->next;
-    } while(temp!=head);
+    }
     printf("Element %d not found\n", k);
 }
 
-Node* deleteByKey(Node* tail, int k)
+Node* deleteByKey(Node* head, int k)
 {
-     if(tail==NULL) {
+     if(head==NULL) {
         printf("LL empty\n"); return NULL;
     }
-    Node* head=tail->next;
     Node* temp=head;
     int i=0;
-    do{
+    while(temp!=NULL){
         i++;
         if(temp->data==k) {
             printf("Element %d found!\n", temp->data); 
-            return delete(tail, i);
+            return delete(head, i);
         }
         temp=temp->next;
-    }while(temp!=head);
+    }
     printf("Element %d not found\n", k);
-    return tail;
+    return head;
 }
 
-Node* orderedList(Node* tail, int data){
-    if(tail==NULL) {
+Node* orderedList(Node* head, int data){
+    if(head==NULL) {
         printf("LL empty\n"); return NULL;
     }
-    Node* head=tail->next;
     printf("Before Insertion: \n");
-    display(tail);
+    display(head);
     Node* temp=head;
-    Node* temp2=NULL;
-    do
+    while(temp!=NULL)
     {
-        temp2= temp->next;
-        
-        do{
+        Node* temp2= temp->next;
+        while(temp2!=NULL)
+        {
             if(temp2->data<temp->data){
                 int tempor= temp2->data;
                 temp2->data=temp->data;
                 temp->data=tempor;
             }
             temp2=temp2->next;
-        }while(temp2!=head);
-        temp=temp->next;
-    }while(temp->next!=head);
-
-    display(tail);
-
-    int i=0;
-    temp=head;
-    int f=0;
-    do
-    {
-        i++;
-        if(temp->data>data) {
-            f=1; break;
         }
         temp=temp->next;
-    }while(temp!=head);
-    if(!f) i++;
-    printf("After Insertion: \n");
-    printf(" POS: %d\n", i);
-    tail= insert(tail,data, i);
-    return tail;
-}
-
-Node* reverse(Node* tail)
-{
-    if(tail==NULL){
-        printf("LL empty\n"); return NULL;
     }
-    Node* prev=tail;
-    Node* curr=tail->next;
-    Node* head= tail->next;
-    Node* temp=NULL;
-
-    printf("Before reversal:\n");
-    display(tail);
-
-    do
+    int i=0;
+    temp=head;
+    while(temp!=NULL)
     {
-        temp=curr->next;
-        curr->next=prev;
-        prev=curr;
-        curr=temp;
-    }while(curr!=head);
-    
-    printf("After reversal:\n");
-    display(head);
+        i++;
+        if(temp->data>data) break;
+        temp=temp->next;
+    }
+    printf("After Insertion: \n");
+    head= insert(head,data, i);
+    // display(head);
     return head;
 }
 
-Node* copyLL(Node* head)
+Node* reverse(Node* head)
 {
-    //head here is basically tail ->naming mistake
-
-    if(head==NULL || size==0){
+    if(head==NULL){
         printf("LL empty\n"); return NULL;
     }
-    Node* temp=head;
-    Node* head2= (Node *)malloc(sizeof(Node));
-    head2->next=NULL;
-    head2->data=head->data;
-    temp=temp->next; Node* prev=head2;
-    do{
-        Node* node=(Node *)malloc(sizeof(Node));
-        node->data=temp->data;
-        prev->next=node;
-        node->next=NULL;
-        prev=node;
-        temp=temp->next;
-    }while(temp!=head);
-    prev->next=head2;
+    Node* prev=NULL;
+    Node* curr=head;
+    Node* temp=NULL;
+
+    printf("Before reversal:\n");
+    display(head);
+    Node* temp2=NULL;
+    while(curr!=NULL)
+    {
+        temp=curr->next;
+       curr->next=curr->prev;
+       curr->prev=temp;
+       prev=curr;
+        curr=temp;
+    }
+    
+    printf("After reversal:\n");
+    display(prev);
     return prev;
 }
+
+// Node* copyLL(Node* head)
+// {
+//     if(head==NULL){
+//         printf("LL empty\n"); return NULL;
+//     }
+//     Node* temp=head;
+//     Node* head2= (Node *)malloc(sizeof(Node));
+//     head2->next=NULL;
+//     head2->data=head->data;
+//     temp=temp->next; Node* prev=head2;
+//     while(temp!=NULL){
+//         Node* node=(Node *)malloc(sizeof(Node));
+//         node->data=temp->data;
+//         prev->next=node;
+//         node->next=NULL;
+//         temp=temp->next;
+//     }
+//     prev->next=NULL;
+//     return head2;
+// }
 
 void main()
 {
@@ -263,7 +230,7 @@ void main()
     while(1)
     {
         printf("0.Exit\n1.Insert Front\n2.Insert Rear\n3.Delete Front\n4.Delete Rear\n5.Display\n6.Insert At Pos\n7.Delete At Pos\n8.Search By Key\n9.Delete By Key\n10.Ordered List\n 11.Reverse A List\n");
-        printf("12.Copy a list\n");
+        // printf("12.Copy a list\n");
         printf("\n-----\nEnter you choice: ");
         scanf("%d",&ch);
         switch(ch){
@@ -334,10 +301,10 @@ void main()
             head=reverse(head);
             break;
 
-            case 12:
-            h2=copyLL(head);
-            display(head);
-            break;
+            // case 12:
+            // h2=copyLL(head);
+            // display(head);
+            // break;
 
             default: printf("Invalid choice\n");
         }
