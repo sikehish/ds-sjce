@@ -333,11 +333,12 @@ int temp;
 
 if(h->data<=1) return h;
 
-while(right!=left->rptr)
+while(right!=left->rptr && right!=left)
 {
 temp = right->data;
 right->data = left->data;
 left->data = temp;
+// printf("%d %d\n", right->data, left->data);
 
 left = left->lptr;
 right = right->rptr;

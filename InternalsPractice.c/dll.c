@@ -213,7 +213,7 @@ Node* reverse(Node* head)
     while(curr!=NULL)
     {
         temp=curr->next;
-       curr->next=curr->prev;
+       curr->next=prev;
        curr->prev=temp;
        prev=curr;
         curr=temp;
