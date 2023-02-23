@@ -1,43 +1,84 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-typedef struct node{
+typedef struct Node{
     int data;
-    struct node * rlink;
-    struct node * llink;
+    struct Node * rlink;
+    struct Node * llink;
 }Node;
 
-void insert(Node* root, int data)
+Node* insert(Node* root, int data)
 {
-    if(data<root->data && root->llink!=NULL) {
-        insert(root,data);
+    if(root==NULL) {
+        Node* newnode= (Node *)malloc(sizeof(Node));
+        newnode->rlink=newnode->llink=NULL;
+        newnode->data=data;
+        return newnode;
     }
-
-    if(data<root->data && root->llink==NULL) {
-        Node* ele= (Node *)malloc(sizeof(Node));
-    ele->data=data;
-    ele->llink=NULL;
-    ele->rlink=NULL;
-    root->llink=ele;
-    printf("Inserted %d ...\n", data);
-    return;
+    if(root->data==data) {
+        printf("Node with this value already exists\n");
+        return root;
     }
+    if(data<root->data) root->llink=insert(root->llink,data);
+    if(data>root->data) root->rlink=insert(root->rlink,data);
+    return root;
+}
 
-    if(data>root->data && root->rlink!=NULL) {
-        insert(root,data);
+Node *inOrder_Predecessor(Node *root)
+{
+    root = root->llink;
+    while (root->rlink != NULL)
+    {
+        root = root->rlink;
     }
-
-if(data>root->data && root->rlink==NULL) {
-        Node* ele= (Node *)malloc(sizeof(Node));
-    ele->data=data;
-    ele->llink=NULL;
-    ele->rlink=NULL;
-    root->rlink=ele;
-    printf("Inserted %d ...\n", data);
-    return;
+    return root;
+}
+Node* delete(Node *root, int key)
+{
+    // Base case.
+    if (root == NULL)
+    {
+        return NULL;
     }
-    
-
+    if (root->data > key)
+    {
+        root->llink = delete(root->llink, key);
+    }
+    else if (root->data < key)
+    {
+        root->rlink = delete(root->rlink, key);
+    }
+    // delete the found Node.
+    else
+    {
+        // Case 1: No child. Leaf Node found.
+        if (root->llink == NULL && root->rlink == NULL)
+        {
+             free(root);
+            root = NULL;
+        }
+        // Case 2: 1 child.
+        else if (root->llink == NULL)
+        {
+            Node *ptr = root;
+            root = root->rlink;
+            free(ptr);
+        }
+        else if (root->rlink == NULL)
+        {
+            Node *ptr = root;
+            root = root->llink;
+            free(ptr);
+        }
+        // Case 3: 2 children.
+        else
+        {
+            Node *iPre = inOrder_Predecessor(root);
+            root->data = iPre->data;
+            root->llink = delete(root->llink, iPre->data); // delete the duplicate from the llink subtree.
+        }
+    }
+    return root;
 }
 
 void preorder(Node* root){
@@ -64,15 +105,11 @@ void postorder(Node* root){
 void main()
 {
     
-    Node* root= (Node *)malloc(sizeof(Node));
-    root->llink=NULL;
-    root->rlink=NULL;
-    printf("Enter the data to be stored in root node\n");
-    scanf("%d", &root->data);
+    Node* root= NULL;
     int ch,ele;
     while(1)
     {
-    printf("1.Build tree\n 2.Preorder traversal\n 3.Inorder Traversal\n 4.Postorder traversal\n 5.Exit");
+    printf("1.Build tree\n 2.Delete Node\n 3.Preorder traversal\n 4.Inorder Traversal\n 5.Postorder traversal\n 6.Exit\n");
         printf("Enter your choice\n");
         scanf("%d",&ch);
         switch(ch)
@@ -80,28 +117,34 @@ void main()
             case 1:
                 printf("Enter element to be inserted\n");
                 scanf("%d", &ele);
-                insert(root,ele);
+                root=insert(root,ele);
                 break;
 
             case 2:
+                printf("Enter element to be deleted\n");
+                scanf("%d", &ele);
+                root=delete(root,ele);
+                break;
+
+            case 3:
             printf("Preorder traversal is: ");
                 preorder(root);
                 printf("\n");
                 break;
 
-            case 3:
+            case 4:
             printf("Inorder traversal is: ");
                 inorder(root);
                 printf("\n");
                 break;
 
-            case 4:
+            case 5:
             printf("Postorder traversal is: ");
                 postorder(root);
                 printf("\n");
                 break;
 
-            case 5:
+            case 6:
             printf("Exiting..");
             exit(0);
 

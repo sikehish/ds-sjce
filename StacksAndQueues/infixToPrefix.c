@@ -52,7 +52,7 @@ void infixToPostfix(char* exp, int size, char* ans)
         
        
         else {
-            while (prec(a)<prec(s->arr[s->top]) && s->top!=-1){
+            while (s->top!=-1 && prec(a)<prec(s->arr[s->top])){
                 ans[j++]=pop(s);
             }
             push(s,a);

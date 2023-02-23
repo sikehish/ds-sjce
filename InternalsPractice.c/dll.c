@@ -185,16 +185,31 @@ Node* orderedList(Node* head, int data){
     }
     int i=0;
     temp=head;
+            Node* node=(Node *)malloc(sizeof(Node));
+    node->data=data;
+    Node* prev=NULL;
+    node->prev=node->next=NULL;
     while(temp!=NULL)
     {
         i++;
-        if(temp->data>data) break;
+        if(temp->data>data) {
+    node->next=temp;
+    node->prev=temp->prev;
+    temp->prev=node;
+    if(node->prev!=NULL) node->prev->next=node;
+        if(i==1)  head=node; 
+        break;
+        }
+        prev=temp;
         temp=temp->next;
     }
-    if(temp==NULL) i++;
+    if(temp==NULL) {
+        prev->next=node;
+        node->prev=temp;
+    }
     printf("After Insertion: \n");
-    head= insert(head,data, i);
-    // display(head);
+    size++;
+    display(head);
     return head;
 }
 
@@ -231,7 +246,7 @@ Node* copyLL(Node* head)
     }
     Node* temp=head;
     Node* head2= (Node *)malloc(sizeof(Node));
-    head2->next=NULL;
+    head2->next=head2->prev=NULL;
     head2->data=head->data;
     temp=temp->next; Node* prev=head2;
     while(temp!=NULL){
