@@ -24,7 +24,7 @@ void bfs(int a[][N], int visited[], int start){
 void dfs(int a[][N], int visited[], int start){
      printf("%d ", start);
     visited[start] = 1;
-    for (int j = 0; j < 7; j++)
+    for (int j = 0; j < N; j++)
     {
         if(a[start][j]==1 && !visited[j]){
             dfs(a, visited, j);
