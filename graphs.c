@@ -54,6 +54,7 @@ void main(){
     for(int i=0; i<N; i++) visited[i]=0;
     printf("BFS Traversal : ");
     bfs(matrix,visited,0);
+    printf("\n");
     break;
      case 3 : 
      for(int i=0; i<N; i++) visited[i]=0; 
