@@ -1,3 +1,10 @@
+// 14. Develop a menu driven program to implement Binary Search tree with the following
+// operations.
+// i) Construction ii) Traversals ( Pre, In and Post Order) iii) Searching a node by key
+// and displaying its information along with its parent is exists, otherwise a suitable
+// message. iv) Counting all types of nodes. v) Finding height
+
+
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -78,7 +85,10 @@ Node* delete(Node *root, int key)
 Node* search(Node* root, int data)
 {
       if (root == NULL)
-       return root;
+      {
+        printf("Node not found\n");
+        return NULL;
+      }
       
       if(root->data == data) {
         printf("Node found: Value= %d\n",root->data);
@@ -154,7 +164,7 @@ void main()
     int ch,ele;
     while(1)
     {
-    printf("1.Build tree\n 2.Delete Node\n 3.Preorder traversal\n 4.Inorder Traversal\n 5.Postorder traversal\n 6.Exit\n");
+    printf(" 1.Build tree\n 2.Search Node\n 3.Preorder traversal\n 4.Inorder Traversal\n 5.Postorder traversal\n 6.Count Nodes\n 7.Find Height\n 8.Exit\n");
         printf("Enter your choice\n");
         scanf("%d",&ch);
         switch(ch)
@@ -166,9 +176,9 @@ void main()
                 break;
 
             case 2:
-                printf("Enter element to be deleted\n");
+                printf("Enter element to be searched\n");
                 scanf("%d", &ele);
-                root=delete(root,ele);
+                search(root,ele);
                 break;
 
             case 3:
@@ -190,6 +200,14 @@ void main()
                 break;
 
             case 6:
+                printf("Total Number of nodes: %d\n", totalNodes(root));
+                break;
+
+            case 7:
+                printf("Total Height: %d\n", height(root));
+                break;
+
+            case 8:
             printf("Exiting..");
             exit(0);
 
