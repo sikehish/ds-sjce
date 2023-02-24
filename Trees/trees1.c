@@ -38,47 +38,6 @@ Node *inOrder_Predecessor(Node *root)
     }
     return root;
 }
-Node* delete(Node *root, int key)
-{
-    // Base case.
-    if (root == NULL) {
-        printf("Node not found\n");
-        return NULL;
-    }
-    if (root->data > key) root->llink = delete(root->llink, key);
-    else if (root->data < key) root->rlink = delete(root->rlink, key);
-    // delete the found Node.
-    else
-    {
-        // Case 1: No child. Leaf Node found.
-        if (root->llink == NULL && root->rlink == NULL)
-        {
-             free(root);
-            root = NULL;
-        }
-        // Case 2: 1 child.
-        else if (root->llink == NULL)
-        {
-            Node *ptr = root;
-            root = root->rlink;
-            free(ptr);
-        }
-        else if (root->rlink == NULL)
-        {
-            Node *ptr = root;
-            root = root->llink;
-            free(ptr);
-        }
-        // Case 3: 2 children.
-        else
-        {
-            Node *iPre = inOrder_Predecessor(root);
-            root->data = iPre->data;
-            root->llink = delete(root->llink, iPre->data); // delete the duplicate from the llink subtree.
-        }
-    }
-    return root;
-}
 
 Node* search(Node* root, int data)
 {
