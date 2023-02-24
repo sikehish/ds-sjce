@@ -75,9 +75,10 @@ int totalNodes(Node* root)
     return 1 + l + r;
 }
 
+//Path having lagest no of edges from the leaf node to root
 int height(Node* node)
 {
-    if (node == NULL)
+    if (node == NULL || (node->llink==NULL && node->rlink==NULL))
         return 0;
     else {
         /* compute the depth of each subtree */
