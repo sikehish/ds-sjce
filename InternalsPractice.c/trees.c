@@ -36,18 +36,9 @@ Node *inOrder_Predecessor(Node *root)
 Node* delete(Node *root, int key)
 {
     // Base case.
-    if (root == NULL)
-    {
-        return NULL;
-    }
-    if (root->data > key)
-    {
-        root->llink = delete(root->llink, key);
-    }
-    else if (root->data < key)
-    {
-        root->rlink = delete(root->rlink, key);
-    }
+    if (root == NULL) return NULL;
+    if (root->data > key) root->llink = delete(root->llink, key);
+    else if (root->data < key) root->rlink = delete(root->rlink, key);
     // delete the found Node.
     else
     {
@@ -80,6 +71,57 @@ Node* delete(Node *root, int key)
     }
     return root;
 }
+
+Node* search(Node* root, int data)
+{
+      if (root == NULL)
+       return root;
+      
+      if(root->data == data) {
+        printf("Node found: Value= %d\n",root->data);
+        return root;
+      }
+    // Key is greater than root's key
+    if (root->data < data)
+    {
+    if(root->rlink!=NULL && root->rlink->data==data) printf("Parent Node: Value= %d\n",root->rlink->data);
+       return search(root->rlink, data);
+    }
+ 
+    // Key is smaller than root's key
+    if(root->llink!=NULL && root->llink->data==data) printf("Parent Node: Value= %d\n",root->llink->data);
+    return search(root->llink, data);
+}
+
+
+int totalNodes(Node* root)
+{
+    if (root == NULL)
+        return 0;
+
+    int l = totalNodes(root->llink);
+    int r = totalNodes(root->rlink);
+ 
+    return 1 + l + r;
+}
+
+int height(Node* node)
+{
+    if (node == NULL)
+        return 0;
+    else {
+        /* compute the depth of each subtree */
+        int lh = maxh(node->llink);
+        int rh = maxh(node->rlink);
+ 
+        /* use the larger one */
+        if (lh > rh)
+            return (lh + 1);
+        else
+            return (rh + 1);
+    }
+}
+
 
 void preorder(Node* root){
     if(root==NULL) return;
