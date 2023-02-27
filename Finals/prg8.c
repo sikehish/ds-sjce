@@ -7,157 +7,170 @@ typedef struct Node{
     int data;
 }Node;
 
+int size=0;
+
 void display(Node* head)
 {
-    if(head->data==0) {
+    if(size==0 || head==NULL) {
         printf("Empty DLL\n"); return;
     }
-    Node* temp=head->next;
-    while(temp!=head){
+    Node* temp=head;
+    do{
         printf("%d ", temp->data);
         temp=temp->next;
-    }
+    }while(temp!=head);
     printf("\n");
 }
 
-
-void insertFront(Node* head, int data)
+Node* deleteFront(Node* head)
 {
-    Node* newnode= (Node *)malloc(sizeof(Node));
-    newnode->data=data;
-    newnode->prev=head;
-    newnode->next=head->next;
-    head->next->prev=newnode;
-    head->next=newnode;
-    (head->data)++;
-    display(head);
-}
-
-void deleteFront(Node* head)
-{
-    if(head->data==0) {
-        printf("Empty DLL\n"); return;
+    if(size==0 || head==NULL) {
+        printf("Empty DLL\n"); return NULL;
     }
     Node* temp=head->next;
-    head->next=head->next->next;
-    temp->next->prev=head;
-    free(temp);
-    head->data--;
-    display(head);
+    head->prev->next=head->next;
+    head->next->prev=head->prev;
+    free(head);
+    size--;
+    if(size==0) temp=NULL;
+    display(temp);
+    return temp;
 }
 
-void insertRear(Node* head, int data)
+Node* deleteRear(Node* head)
 {
-    // printf("YOOOOO\n");
-    Node* newnode= (Node *)malloc(sizeof(Node));
-    newnode->data=data;
-    newnode->prev=head->prev;
-    newnode->next=head;
-    head->prev->next=newnode;
-    head->prev=newnode;
-    (head->data)++;
-     display(head);
-}
-
-void deleteRear(Node* head)
-{
-    if(head->data==0) {
-        printf("Empty DLL\n"); return;
+    if(size==0 || head==NULL) {
+        printf("Empty DLL\n"); return NULL;
     }
-    Node* temp=head->prev;
-    head->prev=temp->prev;
-    temp->prev->next=head;
-    free(temp);
-    head->data--;
+    Node* tail=head->prev;
+    tail->prev->next=head;
+    head->prev=tail->prev;
+    free(tail);
+    size--;
+    if(size==0) head=NULL;
     display(head);
+    return head;
 }
 
-void insertAtPos(Node* head, int data, int pos)
-{
-    if(pos<=0 ){
+// void insertAtPos(Node* head, int data, int pos)
+// {
+//     if(pos<=0 || pos>size){
+//         printf("Invalid pos\n"); return;
+//     }
+//     int i=1;
+//     Node* temp=head;
+//     while(i<pos){
+//         temp=temp->next;
+//         i++;
+//     }
+//     Node* newnode= (Node *)malloc(sizeof(Node));
+//     newnode->data=data;
+//     newnode->prev=temp->prev;
+//     newnode->next=temp;
+//     temp->prev=newnode;
+//     newnode->prev->next=newnode;
+//     size++;
+//     if(i==1) head=newnode;
+//      display(head);
+//      return head;
+// }
+
+void searchByPos(Node* head, int pos){
+    Node* temp=head;
+    if(pos<=0 || pos>size){
         printf("Invalid pos\n"); return;
     }
+    if(temp==NULL) {
+        printf("LL Empty\n");
+        return;
+    }
     int i=1;
-    Node* temp=head->next;
     while(i<pos){
         temp=temp->next;
         i++;
     }
-    // if(temp==head) temp=head->next;
-    Node* newnode= (Node *)malloc(sizeof(Node));
-    newnode->data=data;
-    newnode->prev=temp->prev;
-    newnode->next=temp;
-    temp->prev=newnode;
-    newnode->prev->next=newnode;
-    head->data++;
-     display(head);
+    printf("Element %d found at pos %d\n",temp->data,i);
 }
 
-void deleteAtPos(Node* head, int pos)
-{
-     if(head->data==0) {
-        printf("Empty DLL\n"); return;
-    }
-    int i=1;
-    Node* temp=head->next;
-    while(i<pos){
-        temp=temp->next;
-        i++;
-    }
-    if(temp==head) temp=head->next;
-    temp->prev->next=temp->next;
-    temp->next->prev=temp->prev;
-    free(temp);
-    head->data--;
+Node* insertByOrder(Node* head, int data){
+       Node* node=(Node *)malloc(sizeof(Node));
+       node->data=data;
+
+       printf("Before Insertion: \n");
     display(head);
-}
 
+       if(head==NULL){
+        node->next=node;
+        node->prev=node;
+        head=node;
+       }
+
+    if(head!=NULL)
+    {
+        Node* tail= head->prev;
+       node->next=tail->next;
+       node->prev=tail;
+       tail->next=node;
+       head->prev=node;
+    }
+       
+       size++;
+
+    Node* temp=head;
+    Node* temp2=NULL;
+    
+    do{
+        temp2= temp->next;
+        
+       do{
+            if(temp2->data<temp->data){
+                int tempor= temp2->data;
+                temp2->data=temp->data;
+                temp->data=tempor;
+            }
+            temp2=temp2->next;
+        } while(temp2!=head);
+        temp=temp->next;
+    }while(temp->next!=head);
+    printf("After insertion: \n");
+    display(head);
+       return head;
+}
 
 void main()
 {
-    int ch,k,pos;
-    Node* head= (Node *)malloc(sizeof(Node));
-    head->data=0;
-    head->prev=head->next=head;
+   int ch,k,pos;
+    Node* head=NULL;
     while(1)
     {
-        printf("Enter the choice:\n1Insert Front\n2.Insert Rear\n3.Insert Pos\n4.Delete Front\n5.Delete Rear\n6.Delete Pos\n7.Display\n8.Exit\n");
+        printf("0.Exit\n1.Insert By Order\n2.Delete Rear\n3.Delete Front\n4.Search By Pos\n");
+        printf("\n-----\nEnter you choice: ");
         scanf("%d",&ch);
-        switch (ch)
-        {
-        case 1:
-            printf("Enter the element to be inserted\n");
+        switch(ch){
+            case 0: 
+            exit(0);
+
+            case 1:
+            printf("Enter element to insert at the beginning: ");
             scanf("%d",&k);
-            insertFront(head,k);
+            head=insertByOrder(head, k);
             break;
-        case 2:
-            printf("Enter the element to be inserted\n");
-            scanf("%d",&k);
-            insertRear(head,k);
+
+            case 2:
+            head=deleteRear(head);
             break;
-        case 3:
-            printf("Enter the  pos and element to be inserted\n");
+
+            case 3:
+            head=deleteFront(head);
+            break;
+
+            case 4:
+            printf("Enter the position at which youre searching for an element:\n");
             scanf("%d",&pos);
-            scanf("%d",&k);
-            insertAtPos(head,k, pos);
+            searchByPos(head, pos);
             break;
-        case 4:
-            deleteFront(head);
-            break;
-        case 5:
-            deleteRear(head);
-            break;
-        case 6:
-            printf("Enter the pos to be deleted\n");
-            scanf("%d",&k);
-            deleteAtPos(head, k);
-            break;
-        case 7:
-        display(head); break;
-        case 8: exit(0);
-        default:
-            printf("Invalid character\n");
+
+            default: printf("Invalid choice\n");
         }
-    }
+    } 
 }
