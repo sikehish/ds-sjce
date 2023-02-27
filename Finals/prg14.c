@@ -70,7 +70,7 @@ int height(Node* node)
 {
     if (node == NULL || (node->llink==NULL && node->rlink==NULL))
         return 0;
-    else {
+    
         /* compute the depth of each subtree */
         int lh = height(node->llink);
         int rh = height(node->rlink);
@@ -80,7 +80,6 @@ int height(Node* node)
             return (lh + 1);
         else
             return (rh + 1);
-    }
 }
 
 
