@@ -58,7 +58,7 @@ Node* deleteByPos(Node* tail, int pos)
         printf("Element %d found at tail\n", tail->data); 
         free(tail);
         size--;
-        if(size==0) temp=NULL;
+        if(size==0) temp=NULL; 
         display(temp);
         return temp;
     }
