@@ -29,16 +29,6 @@ Node* insert(Node* root, int data)
     return root;
 }
 
-Node *inOrder_Predecessor(Node *root)
-{
-    root = root->llink;
-    while (root->rlink != NULL)
-    {
-        root = root->rlink;
-    }
-    return root;
-}
-
 Node* search(Node* root, int data)
 {
       if (root == NULL)
