@@ -11,7 +11,7 @@ int size=0;
 
 void display(Node* head)
 {
-    if(size==0) {
+    if(size==0 || head==NULL) {
         printf("Empty DLL\n"); return;
     }
     Node* temp=head;
@@ -30,7 +30,12 @@ Node* insertFront(Node* head, int data)
         printf("%d\n", newnode->data);
     }
     newnode->data=data;
-    if(size==0 || head==NULL) head=newnode;
+    if(size==0 || head==NULL) {
+       head=newnode->prev=newnode->next=newnode;
+        size++;
+    display(head);
+    return head;
+    }
     newnode->next=head;
     newnode->prev=head->prev;
     head->prev->next=newnode;
@@ -44,8 +49,13 @@ Node* insertFront(Node* head, int data)
 Node* insertRear(Node* head, int data)
 {
    Node* newnode= (Node *)malloc(sizeof(Node));
-   if(size==0 || head==NULL) head=newnode;
     newnode->data=data;
+    if(size==0 || head==NULL) {
+       head=newnode->prev=newnode->next=newnode;
+        size++;
+    display(head);
+    return head;
+    }
     newnode->next=head;
     newnode->prev=head->prev;
     head->prev->next=newnode;
@@ -61,14 +71,17 @@ Node* deleteByPos(Node* head, int pos)
         printf("Empty DLL\n"); return NULL;
     }
     if(pos<1 || pos>size) {
-        printf("Invalid position\n"); return NULL;
+        printf("Invalid position\n"); return head;
     }
     if(pos==1){
         head->prev->next=head->next;
+        head->next->prev=head->prev;
+        Node* temp=head->next;
         free(head);
         size--;
-        head=NULL;
-        display(head);
+       if(size==0) temp=NULL;
+        display(temp);
+        return temp;
     }
     Node* temp=head;
     int i=0;
@@ -109,7 +122,7 @@ void main()
     Node* head=NULL;
     while(1)
     {
-        printf("0.Exit\n1.Insert Front\n2.Insert Rear\n3.Search By Pos\n4.Delete By Key\n");
+        printf("0.Exit\n1.Insert Front\n2.Insert Rear\n3.Search By KEY\n4.Delete By Pos\n");
         printf("\n-----\nEnter you choice: ");
         scanf("%d",&ch);
         switch(ch){
