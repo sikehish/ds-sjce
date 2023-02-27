@@ -56,7 +56,6 @@ void postEval(char* exp, int size)
         else if (prec(a)>0){
             int op1=pop(s);
             int op2=pop(s);
-            printf("op1 %d op2 %d\n",op1,op2);
             push(s, operate(op2,op1,a));
         }
     }
