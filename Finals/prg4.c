@@ -48,7 +48,6 @@ Node* deleteByKey(Node* head, int k){
     
 }
 
-
 void searchByPos(Node* head, int pos){
 
     Node* temp= head;

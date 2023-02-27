@@ -7,157 +7,140 @@ typedef struct Node{
     int data;
 }Node;
 
+int size=0;
+
 void display(Node* head)
 {
-    if(head->data==0) {
+    if(size==0) {
         printf("Empty DLL\n"); return;
     }
-    Node* temp=head->next;
-    while(temp!=head){
+    Node* temp=head;
+    do{
         printf("%d ", temp->data);
         temp=temp->next;
-    }
+    }while(temp!=head);
     printf("\n");
 }
 
-
-void insertFront(Node* head, int data)
+Node* insertFront(Node* head, int data)
 {
     Node* newnode= (Node *)malloc(sizeof(Node));
-    newnode->data=data;
-    newnode->prev=head;
-    newnode->next=head->next;
-    head->next->prev=newnode;
-    head->next=newnode;
-    (head->data)++;
-    display(head);
-}
-
-void deleteFront(Node* head)
-{
-    if(head->data==0) {
-        printf("Empty DLL\n"); return;
+    if(newnode==NULL) {
+        printf("HEAAAAD\n");
+        printf("%d\n", newnode->data);
     }
-    Node* temp=head->next;
-    head->next=head->next->next;
-    temp->next->prev=head;
-    free(temp);
-    head->data--;
-    display(head);
-}
-
-void insertRear(Node* head, int data)
-{
-    // printf("YOOOOO\n");
-    Node* newnode= (Node *)malloc(sizeof(Node));
     newnode->data=data;
-    newnode->prev=head->prev;
+    if(size==0 || head==NULL) head=newnode;
     newnode->next=head;
+    newnode->prev=head->prev;
     head->prev->next=newnode;
     head->prev=newnode;
-    (head->data)++;
-     display(head);
-}
-
-void deleteRear(Node* head)
-{
-    if(head->data==0) {
-        printf("Empty DLL\n"); return;
-    }
-    Node* temp=head->prev;
-    head->prev=temp->prev;
-    temp->prev->next=head;
-    free(temp);
-    head->data--;
+    head=newnode;
+    size++;
     display(head);
+    return head;
 }
 
-void insertAtPos(Node* head, int data, int pos)
+Node* insertRear(Node* head, int data)
 {
-    if(pos<=0 ){
-        printf("Invalid pos\n"); return;
-    }
-    int i=1;
-    Node* temp=head->next;
-    while(i<pos){
-        temp=temp->next;
-        i++;
-    }
-    // if(temp==head) temp=head->next;
-    Node* newnode= (Node *)malloc(sizeof(Node));
+   Node* newnode= (Node *)malloc(sizeof(Node));
+   if(size==0 || head==NULL) head=newnode;
     newnode->data=data;
-    newnode->prev=temp->prev;
-    newnode->next=temp;
-    temp->prev=newnode;
-    newnode->prev->next=newnode;
-    head->data++;
-     display(head);
+    newnode->next=head;
+    newnode->prev=head->prev;
+    head->prev->next=newnode;
+    head->prev=newnode;
+    size++;
+    display(head);
+    return head;
 }
 
-void deleteAtPos(Node* head, int pos)
+Node* deleteByPos(Node* head, int pos)
 {
-     if(head->data==0) {
-        printf("Empty DLL\n"); return;
+     if(size==0 || head==NULL) {
+        printf("Empty DLL\n"); return NULL;
     }
-    int i=1;
-    Node* temp=head->next;
-    while(i<pos){
-        temp=temp->next;
+    if(pos<1 || pos>size) {
+        printf("Invalid position\n"); return NULL;
+    }
+    if(pos==1){
+        head->prev->next=head->next;
+        free(head);
+        size--;
+        head=NULL;
+        display(head);
+    }
+    Node* temp=head;
+    int i=0;
+    do{
         i++;
+        if(i==pos){
+            temp->prev->next=temp->next;
+            temp->next->prev=temp->prev;
+            free(temp);
+            temp=NULL;
+            size--;
+            display(head);
+            return head;
+        }
+        temp=temp->next;
+    }while(temp!=head);
+}
+
+void searchByKey(Node* head, int k)
+{
+    if(head==NULL) {
+        printf("LL empty\n"); return;
     }
-    if(temp==head) temp=head->next;
-    temp->prev->next=temp->next;
-    temp->next->prev=temp->prev;
-    free(temp);
-    head->data--;
-    display(head);
+    Node* temp=head;
+   do{
+        if(temp->data==k) {
+            printf("Element %d found!\n", temp->data); return;
+        }
+        temp=temp->next;
+    } while(temp!=head);
+    printf("Element %d not found\n", k);
 }
 
 
 void main()
 {
-    int ch,k,pos;
-    Node* head= (Node *)malloc(sizeof(Node));
-    head->data=0;
-    head->prev=head->next=head;
+   int ch,k,pos;
+    Node* head=NULL;
     while(1)
     {
-        printf("Enter the choice:\n1Insert Front\n2.Insert Rear\n3.Insert Pos\n4.Delete Front\n5.Delete Rear\n6.Delete Pos\n7.Display\n8.Exit\n");
+        printf("0.Exit\n1.Insert Front\n2.Insert Rear\n3.Search By Pos\n4.Delete By Key\n");
+        printf("\n-----\nEnter you choice: ");
         scanf("%d",&ch);
-        switch (ch)
-        {
-        case 1:
-            printf("Enter the element to be inserted\n");
+        switch(ch){
+            case 0: 
+            exit(0);
+
+            case 1:
+            printf("Enter element to insert at the beginning: ");
             scanf("%d",&k);
-            insertFront(head,k);
+            head=insertFront(head, k);
             break;
-        case 2:
-            printf("Enter the element to be inserted\n");
+
+            case 2:
+            printf("Enter element to insert at the end: ");
             scanf("%d",&k);
-            insertRear(head,k);
+            head=insertRear(head, k);
             break;
-        case 3:
-            printf("Enter the  pos and element to be inserted\n");
+
+            case 3:
+            printf("Enter the element to be searched\n");
+            scanf("%d",&k);
+            searchByKey(head, k);
+            break;
+
+            case 4:
+            printf("Enter the position at which deletion should occur:\n");
             scanf("%d",&pos);
-            scanf("%d",&k);
-            insertAtPos(head,k, pos);
+            head=deleteByPos(head, pos);
             break;
-        case 4:
-            deleteFront(head);
-            break;
-        case 5:
-            deleteRear(head);
-            break;
-        case 6:
-            printf("Enter the pos to be deleted\n");
-            scanf("%d",&k);
-            deleteAtPos(head, k);
-            break;
-        case 7:
-        display(head); break;
-        case 8: exit(0);
-        default:
-            printf("Invalid character\n");
+
+            default: printf("Invalid choice\n");
         }
-    }
+    } 
 }
