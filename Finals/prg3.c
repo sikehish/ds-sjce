@@ -130,7 +130,7 @@ Node* insertByOrder(Node* tail, int data){
 void main()
 {
     int ch,k,pos;
-    Node* head=NULL;
+    Node* tail=NULL;
     Node* h2=NULL;
     while(1)
     {
@@ -139,30 +139,24 @@ void main()
         scanf("%d",&ch);
         switch(ch){
             case 0: 
-            while(head!=NULL)
-            {
-                h2=head->next;
-                free(head);
-                head=h2;
-            }
             exit(0);
 
             case 1:
             printf("Enter element to be inserted by order ");
             scanf("%d",&k);
-            head=insertByOrder(head, k);
+            tail=insertByOrder(tail, k);
             break;
 
             case 2:
             printf("Enter pos to delete\n");
             scanf("%d",&pos);
-            head=deleteByPos(head, pos);
+            tail=deleteByPos(tail, pos);
             break;
 
             case 3:
             printf("Enter element to search\n");
             scanf("%d",&k);
-            searchByKey(head, k);
+            searchByKey(tail, k);
             break;
 
             default: printf("Invalid choice\n");
