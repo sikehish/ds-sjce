@@ -54,7 +54,7 @@ Node* deleteRear(Node* head)
 
 // void insertAtPos(Node* head, int data, int pos)
 // {
-//     if(pos<=0 || pos>size){
+//     if(pos<=0 || pos>size+1){
 //         printf("Invalid pos\n"); return;
 //     }
 //     int i=1;
