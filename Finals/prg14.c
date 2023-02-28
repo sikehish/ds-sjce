@@ -76,10 +76,7 @@ int height(Node* node)
         int rh = height(node->rlink);
  
         /* use the larger one */
-        if (lh > rh)
-            return (lh + 1);
-        else
-            return (rh + 1);
+        return (lh>rh)? lh+1 : rh+1;
 }
 
 
