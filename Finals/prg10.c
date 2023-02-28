@@ -28,8 +28,9 @@ int prec(char a)
     else return -1;
 }
 
-void infixToPrefix(char* exp, int size, char* ans)
+void infixToPrefix(char* exp, char* ans)
 {
+    int size=strlen(exp);
     Stack* s= (Stack *)malloc(sizeof(Stack));
     s->top=-1;
     s->size=size;
@@ -64,7 +65,14 @@ void infixToPrefix(char* exp, int size, char* ans)
         ans[j++]=pop(s);
     }
     ans[j]='\0';
-    strrev(ans);
+    int k=j-1,temp;
+    i=0;
+    while(i<k){
+        temp=ans[i];
+        ans[i]=ans[k];
+        ans[k]=temp;
+        i++; k--;
+    }
     printf("Prefix is: %s",ans);
 }
 
@@ -73,5 +81,5 @@ void main(){
     char ans[50];
     printf("Enter exp\n");
     scanf("%s", exp);
-    infixToPrefix(exp, strlen(exp), ans);
+    infixToPrefix(exp, ans);
 }
