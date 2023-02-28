@@ -17,7 +17,7 @@ void create(Queue *q)
 
 void dequeueR(Queue *q)
 {
-    if(q->r==-1)
+    if(q->f>q->r)
     {
         printf("Deletion not possible\n");
         return;
