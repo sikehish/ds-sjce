@@ -44,7 +44,6 @@ void enqueueR(Queue *q,int data)
        printf("Overflow\n");
        printf("Reallocating memory dynamically\n");
        q->a=realloc(q->a,2*q->size*sizeof(int));
-       q->r=q->size-1;
        q->size=2*q->size;
     }
     
