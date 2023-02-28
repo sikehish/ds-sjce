@@ -62,24 +62,27 @@ Node* deleteByPos(Node* tail, int pos)
         display(temp);
         return temp;
     }
+    if(pos==1){
+        head=temp->next;
+        tail->next=head;
+        free(temp);
+        size--;
+        display(tail);
+        return tail;
+    }
    temp=head;
     Node*prev=tail;
-    int i=0;
-    do{
+    int i=1;
+    while(i<pos-1){
         i++;
-        if(i==pos) {
-            printf("Element %d found! at given position %d\n", temp->data, pos); 
-            prev->next=temp->next;
-            free(temp);
-            size--;
-            printf("SIZE %d\n", size);
-            display(tail);
-            return tail;
-        }
-        prev=temp;
         temp=temp->next;
-    }while(temp!=head);
-    printf("Element %d not found\n", pos);
+    }
+    Node* temp2=temp->next;
+    temp->next=temp2->next;
+    printf("Element %d found at pos %d \n",temp2->data, pos);
+    free(temp2);
+    size--;
+    display(tail);
     return tail;
 }
 
@@ -94,7 +97,8 @@ Node* insertByOrder(Node* tail, int data){
        display(tail);
          return tail;
     }
-    
+     printf("Before Insertion: \n");
+    display(tail);
     Node* head=tail->next;
     //Insertion
     tail->next=node;
@@ -102,8 +106,6 @@ Node* insertByOrder(Node* tail, int data){
     tail=node;
     size++;
 
-    printf("Before Insertion: \n");
-    display(tail);
     
     //Ordering
     Node* temp=head;

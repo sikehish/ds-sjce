@@ -5,14 +5,14 @@
 
 int size=0;
 
-int* read(int *p){
+int* read(){
     if(size<=0){
         printf("Operations cannot be performed\n");
         exit(0);
     }
     
     else{
-         p=(int*)malloc(sizeof(int)*size);
+        int* p=(int*)malloc(sizeof(int)*size);
         printf("Enter the element one by one\n");
         for(int i=0;i<(size);i++){
             scanf("%d",(p+i));
@@ -224,7 +224,7 @@ void main(){
     printf("Enter the size of the array for which memeory has to be allocated dynamically\n");
     scanf("%d",&s);
     size=s;
-    p=read(p);
+    p=read();
     display(p);
     while(1){
         printf("\n1.Insert by position\n2.Delete by position\n3.Insert by key\n4.Delete by key\n5.Insert By Order\n6.Search by key\n7.Search By position\n8.Reverse the array\n");

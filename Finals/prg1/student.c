@@ -26,7 +26,7 @@ void read(Student *sp, int* size)
     for(i=0;i<n;i++)
     {
         printf("Enter the Reg no and Name of the student %d\n",i+1);
-        scanf("%d%s",&(sp[i].regno),sp[i].name);
+        scanf("%d%s",&(sp+i)->regno,(sp+i)->name);
         printf("enter the marks of the student in  three tests\n");
         for(j=0;j<3;j++)
         {
@@ -65,15 +65,15 @@ void average(Student *sp)
     }
     for(i=0;i<n;i++)
     {
-        int sum=sp[i].marks[0],min=sp[i].marks[0];
+        int sum=(sp+i)->marks[0],min=sp[i].marks[0];
         for(j=1;j<3;j++)
         {
             sum+=sp[i].marks[j];
             if(sp[i].marks[j]<min) min=sp[i].marks[j];
         }
         printf("Sum %d min %d\n",sum,min);
-        sp[i].average=(sum-min)/2.0;
-        printf("Average of best of the two subject marks of student %d is %lf\n",i+1,sp[i].average);
+        (sp+i)->average=(sum-min)/2.0;
+        printf("Average of best of the two subject marks of student %d is %lf\n",i+1,(sp+i)->average);
     }
 }
 
