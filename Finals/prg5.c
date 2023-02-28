@@ -76,9 +76,6 @@ Node* deleteByKey(Node* tail, int data){
         return tail;
     }
 
-    if(pos<1 || pos>size) {
-        printf("Invalid position\n"); return tail;
-    }
     Node* head=tail->next;
      temp=head;
     if(pos==size){
@@ -91,25 +88,28 @@ Node* deleteByKey(Node* tail, int data){
         display(temp);
         return temp;
     }
+    if(pos==1){
+        head=temp->next;
+        tail->next=head;
+        free(temp);
+        size--;
+        display(tail);
+        return tail;
+    }
    temp=head;
     Node*prev=tail;
-    int i=0;
-    do{
+    int i=1;
+    while(i<pos-1){
         i++;
-        if(i==pos) {
-            printf("Element %d found! at given position %d\n", temp->data, pos); 
-            prev->next=temp->next;
-            free(temp);
-            size--;
-            display(tail);
-            return tail;
-        }
-        prev=temp;
         temp=temp->next;
-    }while(temp!=head);
-    printf("Element %d not found\n", pos);
+    }
+    Node* temp2=temp->next;
+    temp->next=temp2->next;
+    printf("Element %d found at pos %d \n",temp2->data, pos);
+    free(temp2);
+    size--;
+    display(tail);
     return tail;
-
 }
 
 void searchByPos(Node* tail, int pos)
@@ -119,15 +119,13 @@ void searchByPos(Node* tail, int pos)
     }
     Node* head=tail->next;
     Node* temp=head;
-    int i=0;
-   do{
-    i++;
-        if(i==pos) {
-            printf("Element %d found at position %d!\n", temp->data, pos); return;
-        }
-        temp=temp->next;
-    } while(temp!=head);
-    printf("%d is invalid!\n", pos);
+    if(pos<1 || pos>size) {
+        printf("%d is invalid!\n", pos); return;
+    }
+    int i=1;
+    for(int i=1; i<pos; i++) temp=temp->next;
+    printf("%d found at %d pos\n",temp->data, pos);
+    
 }
 
 void main()
