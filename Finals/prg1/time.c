@@ -1,90 +1,91 @@
 #include<stdio.h>
 #include<stdlib.h>
-typedef struct time
+
+typedef struct Time
 {
- int h,m,s;
-}tm;
-void read(tm *t)
-{
-    printf("Enter the time in hrs,min and sec : ");
-    scanf("%d%d%d",&t->h,&t->m,&t->s);
+ int hr,min,sec;
+}Time;
+
+void read(Time* T){
+    printf("Enter the hours, minutes and seconds: \n");
+    scanf("%d%d%d",&T->hr,&T->min,&T->sec);
 }
-void display(tm *t)
-{
-    printf("%dhrs %dmin %dsec ",t->h,t->m,t->s);
+
+void display(Time* T){
+    printf("%d:%d:%d\n", T->hr,T->min,T->sec);
 }
-void update(tm *t)
-{
-    t->s++;
-    if(t->s==60)
-    {
-        t->s=0;
-        t->m++;
+
+void update(Time* T){
+    T->sec++;
+    if(T->sec>=60){
+        T->min+=(T->sec)/60;
+        T->sec%=60;
+        if(T->min>=60){
+            T->hr+=(T->min)/60;
+            T->min%=60;
+            if(T->hr>=24) T->sec=T->hr=T->min=0;
+        }
     }
-    if(t->m==60)
-    {
-        t->m=0;
-        t->h++;
-    }
-    if(t->h==24)
-    {
-        t->h=0;t->m=0;t->s=0;
-    }
-    printf("Updated time : ");
-    display(t);
 }
-void add(tm *t1,tm *t2)
-{
-    t1->s +=t2->s;
-    t1->m +=t2->m;
-    t1->h +=t2->h;
-    if(t1->s>=60)
-    {
-        t1->s%=60;
-        t1->m++;
+
+Time add(Time* T1, Time* T2){
+    Time T3;
+    T3.hr=T1->hr + T2->hr;
+    T3.min=T1->min + T2->min;
+    T3.sec=T1->sec + T2->sec;
+
+    if(T3.sec>=60){
+        T3.min+=(T3.sec)/60;
+        T3.sec%=60;
+        if(T3.min>=60){
+            T3.hr+=(T3.min)/60;
+            T3.min%=60;
+            if(T3.hr>=24) T3.sec=T3.hr=T3.min=0;
+        }
     }
-    if(t1->m>=60)
-    {
-        t1->m%=60;
-        t1->h++;
-    }
-    if(t1->h>24)
-    {
-        t1->h%=24;
-    }
-    printf("Addition of time : ");
-    display(t1);
+    return T3;
 }
-/*void check(tm *t)
-{
-    if(t->h>=24 ||t->m>=60 ||t->s>=60)       to check if
-       exit(0);                           valid time is entered
-}*/
-void main()
-{
+
+void main(){
+    Time T1,T2,T3,T4,T5;
     int ch;
-    tm t1,t2;
-    while(1)
-    {
-     printf("\n1.Read\n2.Display\n3.Update\n4.Add\n5.Exit\nChoice : ");
-     scanf("%d",&ch);
-     switch(ch)
-     {
-        case 1:read(&t1);
-               break;
-        case 2:display(&t1);
-               break;
-        case 3:update(&t1);
-               break;
-        case 4:printf("Enter time 1 : ");
-               read(&t1);
-               printf("Enter time 2 : ");
-               read(&t2);
-               add(&t1,&t2);
-               break;
-        case 5:printf("END");
-               exit(0);
-        default:printf("Invalid choice !!");
-     }
+    while(1){
+        printf("\n1. Read Time\n2. Display Time\n3. Update Time\n4. Add Time\n5. Exit\n");
+        printf("-----\nEnter your choice: ");
+        scanf("%d",&ch);
+        switch(ch){
+            case 1:
+                read(&T1);
+                break;
+
+            case 2:
+            printf("The time is: ");
+                display(&T1);
+                break;
+
+            case 3:
+            printf("Time before updation is: "); display(&T1);
+            update(&T1);
+            printf("Time after updation is: "); display(&T1);
+            break;
+
+            case 4: 
+            printf("Enter time 1: \n");
+            read(&T2);
+            printf("Enter time 2: \n");
+            read(&T3);
+            printf("Time 1 is: "); display(&T2);
+            printf("Time 2 is: "); display(&T3);
+            T4=add(&T2,&T3);
+            printf("The time after adding T1 and T2 is ");
+            display(&T4);
+            break;
+
+            case 5:
+            printf("Exiting...\n");
+            exit(0);
+
+            default: printf("Invalid choice\n");
+        }
     }
 }
