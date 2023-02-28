@@ -69,7 +69,7 @@ void display(Queue *q) {
 int main() {
     Queue *q=malloc(sizeof(Queue));
    create(q);
-    int x,choice, data;
+    int choice, data;
     while(1) {
         printf("\n1.Enqueue\n2.Dequeue\n3.Display\n4.Exit\n");
         printf("Enter your choice: ");
