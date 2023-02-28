@@ -114,12 +114,14 @@ int* deleteByKey(int *p){
     printf("Enter the key\n");
     scanf("%d",&key);
     int i=0,flag=0;
-    for(int i=0;i<size;i++){
+    for(i=0;i<size;i++){
         if(p[i]==key){
+             printf("i: %d p[i]: %d key: %d\n",i, p[i], key);
             flag=1;
             break;
         }
     }
+   
     if(flag=0){
         printf("The key is not present in the array \n");
         return p;
