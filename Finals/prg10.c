@@ -28,7 +28,7 @@ int prec(char a)
     else return -1;
 }
 
-void infixToPostfix(char* exp, int size, char* ans)
+void infixToPrefix(char* exp, int size, char* ans)
 {
     Stack* s= (Stack *)malloc(sizeof(Stack));
     s->top=-1;
@@ -73,5 +73,5 @@ void main(){
     char ans[50];
     printf("Enter exp\n");
     scanf("%s", exp);
-    infixToPostfix(exp, strlen(exp), ans);
+    infixToPrefix(exp, strlen(exp), ans);
 }
