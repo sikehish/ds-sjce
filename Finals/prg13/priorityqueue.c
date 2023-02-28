@@ -27,22 +27,11 @@ void enqueue(Queue *q, int data) {
        q->size=2*q->size;
     }
 
-    // //EMPTY QUEUE
-    // if(q->r==-1)
-    //      q->a[++q->r]=data;
-
     int i;
     for (i = q->r; i >= q->f; i--)
     {
-        
-        if(q->a[i]>data)
-        {
-             q->a[i+1]=q->a[i];
-            q->a[i]=data;
-        }
-           
-       else
-          break;
+        if(q->a[i]>data)  q->a[i+1]=q->a[i];     
+        else break;
     }
            q->a[i+1]=data;
            q->r++;
